@@ -31,8 +31,12 @@ function definition() {
 	}
 
 	function _emit(topic, args) {
-		if (topic instanceof Array)
-			topic = JSON.stringify(topic);
+		if (topic instanceof Array) {
+			for (var i = 0; i < topic.length; ++i) {
+				_emit.call(this, topic[i], args);
+			}
+		}
+		
 		if (!this._events) return;
 		var subs = this._events[topic];
 		if (!subs) return;
