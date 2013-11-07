@@ -1,0 +1,202 @@
+<html>
+<body>
+  <script>
+  window.onerror = function() {
+    console.log(arguments);
+  };
+
+
+// looking at https://github.com/occ/TraceKit/blob/master/tracekit.js#L616
+// and experimentation:
+// Contents of Exception in various browsers.
+    //
+    // SAFARI:
+    // ex.message = Can't find variable: qq
+    // ex.line = 59
+    // ex.sourceId = 580238192
+    // ex.sourceURL = http://...
+    // ex.expressionBeginOffset = 96
+    // ex.expressionCaretOffset = 98
+    // ex.expressionEndOffset = 98
+    // ex.name = ReferenceError
+    //
+    // FIREFOX:
+    // ex.message = qq is not defined
+    // ex.fileName = http://...
+    // ex.lineNumber = 59
+    // ex.stack = ...stack trace... (see the example below)
+    // ex.name = ReferenceError
+    //
+    // CHROME:
+    // ex.message = qq is not defined
+    // ex.name = ReferenceError
+    // ex.type = not_defined
+    // ex.arguments = ['aa']
+    // ex.stack = ...stack trace...
+    //
+    // INTERNET EXPLORER:
+    // ex.message = ...
+    // ex.name = ReferenceError
+    //
+    // OPERA:
+    // ex.message = ...message... (see the example below)
+    // ex.name = ReferenceError
+    // ex.opera#sourceloc = 11  (pretty much useless, duplicates the info in ex.message)
+    // ex.stacktrace = n/a; see 'opera:config#UserPrefs|Exceptions Have Stacktrace'
+
+
+// Looks like TraceKit is getting cross browser support for col numbers
+// by searching for the source in the file...?
+    // function computeStackTraceFromStackProp(ex) {
+    //     if (!ex.stack) {
+    //         return null;
+    //     }
+
+    //     var chrome = /^\s*at (?:((?:\[object object\])?\S+(?: \[as \S+\])?) )?\(?((?:file|http|https):.*?):(\d+)(?::(\d+))?\)?\s*$/i,
+    //         gecko = /^\s*(\S*)(?:\((.*?)\))?@((?:file|http|https).*?):(\d+)(?::(\d+))?\s*$/i,
+    //         lines = ex.stack.split('\n'),
+    //         stack = [],
+    //         parts,
+    //         element,
+    //         reference = /^(.*) is undefined$/.exec(ex.message);
+
+    //     for (var i = 0, j = lines.length; i < j; ++i) {
+    //         if ((parts = gecko.exec(lines[i]))) {
+    //             element = {
+    //                 'url': parts[3],
+    //                 'func': parts[1] || UNKNOWN_FUNCTION,
+    //                 'args': parts[2] ? parts[2].split(',') : '',
+    //                 'line': +parts[4],
+    //                 'column': parts[5] ? +parts[5] : null
+    //             };
+    //         } else if ((parts = chrome.exec(lines[i]))) {
+    //             element = {
+    //                 'url': parts[2],
+    //                 'func': parts[1] || UNKNOWN_FUNCTION,
+    //                 'line': +parts[3],
+    //                 'column': parts[4] ? +parts[4] : null
+    //             };
+    //         } else {
+    //             continue;
+    //         }
+
+    //         if (!element.func && element.line) {
+    //             element.func = guessFunctionName(element.url, element.line);
+    //         }
+
+    //         if (element.line) {
+    //             element.context = gatherContext(element.url, element.line);
+    //         }
+
+    //         stack.push(element);
+    //     }
+
+    //     if (stack[0] && stack[0].line && !stack[0].column && reference) {
+    //         stack[0].column = findSourceInLine(reference[1], stack[0].url, stack[0].line);
+    //     }
+
+    //     if (!stack.length) {
+    //         return null;
+    //     }
+
+    //     return {
+    //         'mode': 'stack',
+    //         'name': ex.name,
+    //         'message': ex.message,
+    //         'url': document.location.href,
+    //         'stack': stack,
+    //         'useragent': navigator.userAgent
+    //     };
+    // }
+
+    // /**
+    //  * Computes stack trace information from the stacktrace property.
+    //  * Opera 10 uses this property.
+    //  * @param {Error} ex
+    //  * @return {?Object.<string, *>} Stack trace information.
+    //  */
+    // function computeStackTraceFromStacktraceProp(ex) {
+    //     // Access and store the stacktrace property before doing ANYTHING
+    //     // else to it because Opera is not very good at providing it
+    //     // reliably in other circumstances.
+    //     var stacktrace = ex.stacktrace;
+
+    //     var testRE = / line (\d+), column (\d+) in (?:<anonymous function: ([^>]+)>|([^\)]+))\((.*)\) in (.*):\s*$/i,
+    //         lines = stacktrace.split('\n'),
+    //         stack = [],
+    //         parts;
+
+    //     for (var i = 0, j = lines.length; i < j; i += 2) {
+    //         if ((parts = testRE.exec(lines[i]))) {
+    //             var element = {
+    //                 'line': +parts[1],
+    //                 'column': +parts[2],
+    //                 'func': parts[3] || parts[4],
+    //                 'args': parts[5] ? parts[5].split(',') : [],
+    //                 'url': parts[6]
+    //             };
+
+    //             if (!element.func && element.line) {
+    //                 element.func = guessFunctionName(element.url, element.line);
+    //             }
+    //             if (element.line) {
+    //                 try {
+    //                     element.context = gatherContext(element.url, element.line);
+    //                 } catch (exc) {}
+    //             }
+
+    //             if (!element.context) {
+    //                 element.context = [lines[i + 1]];
+    //             }
+
+    //             stack.push(element);
+    //         }
+    //     }
+
+    //     if (!stack.length) {
+    //         return null;
+    //     }
+
+    //     return {
+    //         'mode': 'stacktrace',
+    //         'name': ex.name,
+    //         'message': ex.message,
+    //         'url': document.location.href,
+    //         'stack': stack,
+    //         'useragent': navigator.userAgent
+    //     };
+    // }
+
+
+  try {
+    function f() {
+      var x = a.b.c;
+    }
+    (function() { f(); })();
+  } catch(e) {
+  	console.log('Error');
+    console.log(e);
+
+    console.log('Stack');
+    console.log(e.stack);
+
+    console.log('Line');
+    console.log(e.lineNumber);
+
+    console.log('Col');
+    console.log(e.cloumnNumber);
+
+    console.log('File');
+    console.log(e.fileName);
+
+    console.log('Keys');
+    console.log(Object.keys(e));
+
+
+    console.log(e.stack[0]);
+  }
+
+  z.d.e;
+  </script>
+</body>
+</html>
