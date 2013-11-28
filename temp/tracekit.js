@@ -1105,8 +1105,14 @@ if (!TraceKit.linesOfContext || TraceKit.linesOfContext < 1) {
 }
 
 
+if (typeof module !== 'undefined' && module.exports) {
+    module.exports = TraceKit;
+} else if (typeof define !== 'undefined' && define.amd) {
+    define(function() {
+        return TraceKit;
+    });
+} else {
+    window.TraceKit = TraceKit;
+}
 
-// Export to global object
-window.TraceKit = TraceKit;
-
-}(window));
+}(this));
