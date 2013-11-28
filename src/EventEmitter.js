@@ -31,8 +31,6 @@ function definition() {
 	}
 
 	function _emit(topic, args) {
-		if (topic instanceof Array)
-			topic = JSON.stringify(topic);
 		if (!this._events) return;
 		var subs = this._events[topic];
 		if (!subs) return;
@@ -73,7 +71,13 @@ function definition() {
 		*/
 		emit: function(topic) {
 			var args = arguments.length > 1 ? _splice(arguments, 1, arguments.length) : [];
-			_emit.call(this, topic, args);
+			if (topic instanceof Array) {
+				for (var i = 0; i < topic.length; ++i) {
+					_emit.call(this, topic[i], args);
+				}
+			} else {
+				_emit.call(this, topic, args);
+			}
 		},
 		
 		trigger: function() {

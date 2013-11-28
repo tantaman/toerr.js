@@ -1,13 +1,8 @@
 (function() {
 function definition(EventEmitter) {
-	var toerr = {
-		report: function(error, topic, options) {
-			
-		}
-	};
-
+	var toerr = {};
 	EventEmitter.addTo(toerr);
-
+	toerr.report = toerror.emit;
 	return toerr;
 }
 
