@@ -1,0 +1,27 @@
+{
+  "name": "toerr.js",
+  "version": "0.0.1",
+  "description": "js error reporting and logging",
+  "main": "index.js",
+  "scripts": {
+    "test": "grunt test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/tantaman/toerr.js.git"
+  },
+  "keywords": [
+    "error",
+    "reporting",
+    "production",
+    "logging"
+  ],
+  "author": "Matt Crinklaw-Vogt",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/tantaman/toerr.js/issues"
+  },
+  "dependencies": {
+    "express": "~3.4.4"
+  }
+}
